@@ -1,0 +1,37 @@
+```{r}
+# Create the dataframe to record the results
+df <- data.frame(strat = c("stick", "switch"),
+                 wins = 0)
+
+# Create the guess2 object so the while loop has an object to work with
+guess2 <- 1
+
+for (i in 1:1000){
+  # Create a dataframe with three doors concealing 2 goats and 1 car
+  mh <- data.frame(door = 1:3,
+                   prize = sample(c("car","goat","goat"), 3, replace = F))
+  
+  # First guess is completely random, 1 out of 3
+  guess <- sample(1:3, 1)
+  
+  # Monty will always open a door that isn't the first guess and doesn't conceal
+  # a car
+  monty <- mh$door[mh$door != guess & mh$prize != "car"][[1]]
+  
+  # Keep sampling 1:3 until you get the number that isn't guess 1 or Monty's pick
+  while (guess2 == guess | guess2 == monty){
+    guess2 <- sample(1:3, 1)
+  }
+  
+  # Record the results
+  
+  if (mh[guess, 2] == "car"){
+    df$wins[1] <- df$wins[1] + 1
+  }
+  
+  if (mh[guess2, 2] == "car"){
+    df$wins[2] <- df$wins[2] + 1
+  }
+}
+
+```
